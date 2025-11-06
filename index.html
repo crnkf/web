@@ -48,3 +48,90 @@ body.light .project-card {background:var(--card-bg-light); box-shadow:0 8px 20px
 .project-desc {font-size:16px; line-height:1.8; margin-bottom:15px;}
 .spotify-embed {width:100%; max-width:350px; height:352px; border:none; border-radius:12px; overflow:hidden;}
 .ig-button {padding:10px 18px; border-radius:12px; background:var(--button-bg); color:inherit; font-size:14px; transition: background 0.3s, border-color 0.3s; border:2px solid var(--button-border); cursor:pointer; margin-top:10px;}
+.ig-button:hover {background: var(--button-hover); border-color: var(--accent);}
+#contact p a {color:var(--accent);}
+footer {text-align:center; padding:30px 20px; font-size:13px;}
+.cursor-light {position:fixed; top:0; left:0; width:50px; height:50px; pointer-events:none; border-radius:50%; background: radial-gradient(circle, rgba(128,128,128,0.4) 0%, rgba(0,0,0,0) 70%); transform:translate(-50%, -50%); mix-blend-mode:screen; transition: transform 0.05s ease; z-index:1000;}
+body.light .cursor-light {background: radial-gradient(circle, rgba(128,128,128,0.4) 0%, rgba(255,255,255,0) 70%);}
+@media(max-width:768px){.project-card {flex-direction:column; align-items:flex-start;}.project-left {max-width:100%; margin-bottom:20px;}.spotify-embed {max-width:100%;}}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="#fresh-trash">fresh trash</a>
+    <a href="#cernykafe">cernykafe</a>
+    <a href="#contact">kontakt</a>
+    <span id="theme-toggle">zhasnuto</span>
+  </nav>
+</header>
+<div class="cursor-light"></div>
+<main>
+  <section id="fresh-trash">
+    <h2>fresh trash</h2>
+    <div class="project-card">
+      <div class="project-left">
+        <div class="project-desc">fresh trash vznikl v prosinci 2023. hraje něco mezi hlukem a rockem. děláme to, protože nemůžeme jinak. někdy to zní rozbitě, někdy až moc čistě, ale vždycky upřímně.</div>
+        <a class="ig-button" href="https://www.instagram.com/fresh_trash_/" target="_blank">follow</a>
+      </div>
+      <iframe class="spotify-embed" src="https://open.spotify.com/embed/artist/4dOdyJGNkauR41Agn1kOBF?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+  </section>
+  <section id="cernykafe">
+    <h2>cernykafe</h2>
+    <div class="project-card">
+      <div class="project-left">
+        <div class="project-desc">cernykafe píše songy ve tři ráno, když má hlavu jako papiňák. jsou to krátký výdechy, které nechce držet dýl, než musí.</div>
+      </div>
+      <iframe class="spotify-embed" src="https://open.spotify.com/embed/artist/5QmCZkdvPOJewFN3SPaBbP?utm_source=generator" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+  </section>
+  <section id="contact">
+    <h2>kontakt</h2>
+    <p>pro booking nebo dotazy: <a href="mailto:info@cernykafe.com">info@cernykafe.com</a></p>
+  </section>
+</main>
+<footer>
+  kopirajt cernykafe dvatisícedvacetpět
+</footer>
+<script>
+// Smooth scroll
+document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Fade in project cards
+const cards = document.querySelectorAll('.project-card');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){ entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+  });
+}, { threshold: 0.1 });
+cards.forEach(card => observer.observe(card));
+
+// Cursor light
+const cursor = document.querySelector('.cursor-light');
+document.addEventListener('mousemove', e => { cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`; });
+
+// Theme toggle and system detection
+const toggle = document.getElementById('theme-toggle');
+const bodyEl = document.body;
+const savedTheme = localStorage.getItem('theme');
+function applyTheme(theme){
+  bodyEl.className = theme;
+  toggle.textContent = theme==='dark' ? 'zhasnuto' : 'rozsvíceno';
+  localStorage.setItem('theme', theme);
+  toggle.style.borderColor = theme==='dark' ? 'var(--toggle-border-dark)' : 'var(--toggle-border-light)';
+}
+if(savedTheme){ applyTheme(savedTheme); } else {
+  applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light');
+}
+toggle.addEventListener('click', ()=>{
+  applyTheme(bodyEl.classList.contains('dark') ? 'light':'dark');
+});
+</script>
+</body>
+</html>
